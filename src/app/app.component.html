@@ -1,0 +1,29 @@
+<h1 class="text-center">Survey</h1>
+
+<form [formGroup]="surveyForm">
+  <div formArrayName="survey">
+    <div class="survey-container" [formGroupName]="i" *ngFor="let s of surveyForm.get('survey')['controls']; let i = index">
+      <div class="style-form">
+        <h4>{{ surveyForm.controls['survey']['controls'][i].controls.title.value | titlecase }}</h4>
+      </div>
+
+      <div formArrayName="questions">
+        <div class="question-container" [formGroupName]="aIndex" *ngFor="let q of surveyForm.controls['survey']['controls'][i].get('questions')['controls']; let aIndex = index;">
+          <p>{{ aIndex + 1 }}.) {{ surveyForm.controls['survey']['controls'][i].controls['questions']['controls'][aIndex].controls.title.value | titlecase }} <span class="required">*</span></p>
+        
+          <div class="d-flex">
+            <div class="ans-group" *ngFor="let ans of surveyData[i].questions[aIndex].answeroptions; let bIndex = index;">
+              <input type="radio" [name]="'ans' + i + aIndex" (change)="selectAnswer(ans.id, i, aIndex)"> <span class="ans">{{ ans.answer }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<br>
+<div class="text-center">
+  <button type="submit" (click)="submit()" [disabled]="!surveyForm.valid">Submit</button>
+</div>
+<br>
